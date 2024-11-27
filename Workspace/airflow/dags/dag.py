@@ -18,7 +18,7 @@ default_args = {
 dag = DAG(
     'weather_data_pipeline',
     default_args=default_args,
-    schedule_interval=None,  # Or set a cron expression
+    schedule_interval='0 21 * * 1',  # Or set a cron expression
 )
 
 task_fetch_data = PythonOperator(
