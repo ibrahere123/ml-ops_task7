@@ -1,0 +1,15 @@
+artifact_uri: file:///D:\OneDrive\Desktop\ml-ops_task7\mlflow_logs\mlflow_logs/696527973086188632/426abf83bb98429081c1cee68f17772e/artifacts
+end_time: 1733062074764
+entry_point_name: ''
+experiment_id: '696527973086188632'
+lifecycle_stage: active
+run_id: 426abf83bb98429081c1cee68f17772e
+run_name: whimsical-gull-889
+run_uuid: 426abf83bb98429081c1cee68f17772e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1733062066277
+status: 3
+tags: []
+user_id: Ibrahim
