@@ -1,4 +1,4 @@
 flask
 pytest
 joblib
-sklearn
+scikit-learn
