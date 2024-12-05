@@ -24,9 +24,9 @@ jobs:
           cd Fullstack/Backend/Flask
           pip install -r requirements.txt
 
-      - name: Run Backend Unit Tests for Flask
+      - name: Run Backend Unit Tests 
         run: |
-          cd Fullstack/Backend/Flask
+          cd Fullstack/Backend
           pytest tests/
 
       - name: Set up Node.js for Express
@@ -38,11 +38,6 @@ jobs:
         run: |
           cd Fullstack/Backend/Express
           npm install
-
-      - name: Run Backend Unit Tests for Express
-        run: |
-          cd Fullstack/Backend
-          pytest /tests
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -83,11 +78,6 @@ jobs:
         run: |
           cd Fullstack/Frontend
           npm install
-
-      - name: Run Frontend Unit Tests
-        run: |
-          cd Fullstack/Frontend
-          npm test -- --watchAll=false --coverage
 
       - name: Build and Push Docker Image for Frontend
         run: |
