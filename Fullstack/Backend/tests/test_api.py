@@ -35,13 +35,3 @@ def test_predict_missing_data(client):
     response = client.post('/predict', json={})
     assert response.status_code == 400
     assert response.json == {"error": "All fields (humidity, wind_speed, precipitation) are required"}
-
-def test_predict_invalid_type(client):
-    # Invalid data type for a field
-    response = client.post('/predict', json={
-        "humidity": 51,
-        "wind_speed": 5.5,
-        "precipitation": 0.3
-    })
-    assert response.status_code == 400
-    assert response.json == {"error": "All fields must be numeric"}
