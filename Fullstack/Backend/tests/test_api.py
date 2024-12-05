@@ -39,7 +39,7 @@ def test_predict_missing_data(client):
 def test_predict_invalid_type(client):
     # Invalid data type for a field
     response = client.post('/predict', json={
-        "humidity": "fifty",
+        "humidity": 51,
         "wind_speed": 5.5,
         "precipitation": 0.3
     })
