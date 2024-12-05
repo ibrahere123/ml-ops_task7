@@ -1,18 +1,18 @@
-# Dockerfile for Flask (Python)
-FROM python:3.9
+# Dockerfile for Express (Node.js)
+FROM node:16
 
 # Set the working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+# Copy package.json and install dependencies
+COPY package*.json ./
+RUN npm install
 
 # Copy the rest of the app
 COPY ./ ./
 
-# Expose the port Flask is running on
-EXPOSE 5000
+# Expose the port Express is running on
+EXPOSE 3000
 
-# Command to run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Command to run the Express app
+CMD ["npm", "start"]
