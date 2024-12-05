@@ -5,11 +5,11 @@ FROM python:3.9
 WORKDIR /app
 
 # Install dependencies
-COPY Fullstack/Backend/Flask/requirements.txt ./
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Copy the rest of the app
-COPY Fullstack/Backend/Flask/ ./
+COPY ./ ./
 
 # Expose the port Flask is running on
 EXPOSE 5000
