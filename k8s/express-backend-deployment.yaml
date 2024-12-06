@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-backend
+  labels:
+    app: express-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: express-backend
+  template:
+    metadata:
+      labels:
+        app: express-backend
+    spec:
+      containers:
+      - name: express-backend
+        image: iboe0512/weather-app-backend-express:latest
+        ports:
+        - containerPort: 3000
