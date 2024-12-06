@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - prod
-  pull_request:
-    branches:
-      - prod
+ 
 
 jobs:
   deploy-to-k8s:
