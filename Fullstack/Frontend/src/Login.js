@@ -1,54 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f4",
-  },
-  formContainer: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    width: "300px",
-  },
-  inputGroup: {
-    marginBottom: "15px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginTop: "5px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  error: {
-    color: "red",
-    fontSize: "12px",
-  },
-  signupLink: {
-    textAlign: "center",
-    marginTop: "10px",
-  },
-};
+import { useNavigate } from "react-router-dom"; 
+import { motion } from "framer-motion"; // Import framer-motion
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // State for managing error messages
+  const [error, setError] = useState(""); 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -57,69 +14,73 @@ const Login = () => {
       return;
     }
 
-    try {
-      // Send credentials to the backend /login route
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+    const token = "dummy_token"; 
 
-      const data = await response.json();
-
-      // Check if the login was successful and if the token is returned
-      if (data.token) {
-        localStorage.setItem("token", data.token); // Store the token in localStorage
-        navigate("/weatherform"); // Navigate to the WeatherForm page
-      } else {
-        setError(data.error || "Invalid username or password"); // Show error message from backend
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      setError("An error occurred while logging in. Please try again.");
+    if (token) {
+      localStorage.setItem("token", token); 
+      navigate("/weatherform"); 
+    } else {
+      setError("Invalid username or password.");
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h2>Login</h2>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-500">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="relative z-10 max-w-md mx-auto p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl"
+      >
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Login</h2>
 
-        <div style={styles.inputGroup}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            style={styles.input}
-          />
-        </div>
+        <div className="space-y-4">
+          <div className="relative">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              className="w-full pl-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
 
-        <div style={styles.inputGroup}>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            style={styles.input}
-          />
-        </div>
+          <div className="relative">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full pl-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
 
-        {error && <div style={styles.error}>{error}</div>} {/* Error message */}
+          {error && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-red-500 text-center"
+            >
+              {error}
+            </motion.p>
+          )}
 
-        <div>
-          <button onClick={handleLogin} style={styles.button}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleLogin}
+            className="w-full py-3 rounded-lg text-white font-semibold bg-blue-500 hover:bg-blue-600 transition-all duration-300"
+          >
             Login
-          </button>
+          </motion.button>
         </div>
 
-        <div style={styles.signupLink}>
+        <div className="mt-4 text-center">
           <span>Don't have an account? </span>
-          <a href="/signup">Sign up</a>
+          <a href="/signup" className="text-blue-500">Sign up</a>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

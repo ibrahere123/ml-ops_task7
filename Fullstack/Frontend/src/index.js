@@ -5,6 +5,8 @@ import App from "./App";
 import Signup from "./Signup"; // Import Signup component
 import Login from "./Login"; // Import Login component
 import WeatherForm from "./components/weatherform"; // Import WeatherForm
+import './index.css';
+
 
 ReactDOM.render(
   <Router>
