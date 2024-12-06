@@ -8,7 +8,7 @@ on:
 jobs:
   deploy-to-k8s:
     name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       # Step 1: Checkout the code
