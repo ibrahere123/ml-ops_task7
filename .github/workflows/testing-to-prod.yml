@@ -1,0 +1,77 @@
+name: CD Pipeline - Testing to Production
+
+on:
+  push:
+    branches:
+      - prod
+  pull_request:
+    branches:
+      - prod
+
+jobs:
+  deploy-to-k8s:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Minikube
+      - name: Set up Minikube
+        uses: manusa/actions-setup-minikube@v2
+        with:
+          minikube-version: 'v1.30.1'
+          kubernetes-version: 'v1.26.3'
+          driver: docker
+
+      # Step 3: Start Minikube
+      - name: Start Minikube
+        run: |
+          minikube start --wait=true
+          minikube status
+
+      # Step 4: Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.26.3'
+
+      # Step 5: Log in to DockerHub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 6: Pull Docker Images (Optional, but good for verification)
+      - name: Pull Docker Images from DockerHub
+        run: |
+          docker pull iboe0512/weather-app-backend-flask:latest
+          docker pull iboe0512/weather-app-backend-express:latest
+          docker pull iboe0512/weather-app-frontend:latest
+
+      # Step 7: Apply Kubernetes Manifests for Flask Backend
+      - name: Deploy Flask Backend
+        run: |
+          kubectl apply -f k8s/flask-backend-deployment.yaml
+          kubectl apply -f k8s/flask-backend-service.yaml
+
+      # Step 8: Apply Kubernetes Manifests for Express Backend
+      - name: Deploy Express Backend
+        run: |
+          kubectl apply -f k8s/express-backend-deployment.yaml
+          kubectl apply -f k8s/express-backend-service.yaml
+
+      # Step 9: Apply Kubernetes Manifests for Frontend
+      - name: Deploy Frontend
+        run: |
+          kubectl apply -f k8s/frontend-deployment.yaml
+          kubectl apply -f k8s/frontend-service.yaml
+
+      # Step 10: Verify Kubernetes Resources
+      - name: Verify Kubernetes Pods and Services
+        run: |
+          kubectl get pods
+          kubectl get services

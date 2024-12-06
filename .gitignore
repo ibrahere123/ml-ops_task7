@@ -1,3 +1,5 @@
 /forecast_weather_data.csv
 /processed_data.csv
 /model.pkl
+.env
+node_modules

@@ -1,0 +1,111 @@
+name: CI Pipeline - Dev to Testing
+
+on:
+  push:
+    branches:
+      - testing
+  pull_request:
+    branches:
+      - testing
+
+jobs:
+  test-backend:
+    name: Test Backend and Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Setup Python environment for Flask
+      - name: Set up Python for Flask
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      # Install Flask dependencies
+      - name: Install Backend Dependencies for Flask
+        run: |
+          cd Fullstack/Backend/Flask
+          pip install -r requirements.txt
+
+      # Run Flask unit tests
+      - name: Run Backend Unit Tests
+        run: |
+          cd Fullstack/Backend
+          pytest tests/
+
+      # Setup Node.js for Express
+      - name: Set up Node.js for Express
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Install Express dependencies
+      - name: Install Backend Dependencies for Express
+        run: |
+          cd Fullstack/Backend/Express
+          npm install
+
+      # Log in to DockerHub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build and push Docker image for Flask backend
+      - name: Build and Push Docker Image for Backend (Flask)
+        run: |
+          cd Fullstack/Backend/Flask
+          docker build -t iboe0512/weather-app-backend-flask:latest .
+          docker tag iboe0512/weather-app-backend-flask:latest iboe0512/weather-app-backend-flask:${{ github.sha }}
+          docker push iboe0512/weather-app-backend-flask:latest
+          docker push iboe0512/weather-app-backend-flask:${{ github.sha }}
+
+      # Build and push Docker image for Express backend
+      - name: Build and Push Docker Image for Backend (Express)
+        run: |
+          cd Fullstack/Backend/Express
+          docker build -t iboe0512/weather-app-backend-express:latest .
+          docker tag iboe0512/weather-app-backend-express:latest iboe0512/weather-app-backend-express:${{ github.sha }}
+          docker push iboe0512/weather-app-backend-express:latest
+          docker push iboe0512/weather-app-backend-express:${{ github.sha }}
+
+  test-frontend:
+    name: Test Frontend and Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Setup Node.js environment for frontend
+      - name: Set up Node.js for Frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Install frontend dependencies
+      - name: Install Frontend Dependencies
+        run: |
+          cd Fullstack/Frontend
+          npm install
+
+      # Log in to DockerHub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build and push Docker image for frontend
+      - name: Build and Push Docker Image for Frontend
+        run: |
+          cd Fullstack/Frontend
+          docker build -t iboe0512/weather-app-frontend:latest .
+          docker tag iboe0512/weather-app-frontend:latest iboe0512/weather-app-frontend:${{ github.sha }}
+          docker push iboe0512/weather-app-frontend:latest
+          docker push iboe0512/weather-app-frontend:${{ github.sha }}
