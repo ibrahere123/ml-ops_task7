@@ -75,7 +75,7 @@ jobs:
       # Step 11: Optionally expose Minikube service using ngrok
       - name: Install ngrok
         run: |
-          curl -s https://ngrok.com/download | tar xz && mv ngrok /usr/local/bin
+          curl -s https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip
 
       - name: Expose Minikube Service with ngrok
         run: |
