@@ -70,7 +70,7 @@ jobs:
       # Step 10: Port Forward the Frontend Service for internal access
       - name: Port Forward Frontend Service
         run: |
-          kubectl port-forward svc/frontend-service 8080:80 &
+          kubectl port-forward svc/frontend-service 8081:80 &
 
       # Step 11: Optionally expose Minikube service using ngrok
       - name: Install ngrok
