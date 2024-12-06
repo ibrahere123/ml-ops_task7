@@ -57,7 +57,7 @@ jobs:
           kubectl apply -f k8s/flask-backend-service.yaml
 
       # Step 8: Apply Kubernetes Manifests for Express Backend
-      - name: Deploy Express Backend
+      - name: Deploy Express Backend2
         run: |
           kubectl apply -f k8s/express-backend-deployment.yaml
           kubectl apply -f k8s/express-backend-service.yaml
