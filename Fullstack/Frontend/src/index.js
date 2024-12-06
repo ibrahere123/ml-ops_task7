@@ -5,11 +5,14 @@ import App from "./App";
 import Signup from "./Signup"; // Import Signup component
 import Login from "./Login"; // Import Login component
 import WeatherForm from "./components/weatherform"; // Import WeatherForm
+import './index.css';
+
 
 ReactDOM.render(
   <Router>
     <Routes>
-      <Route path="/" element={<App />} /> {/* This is your home page */}
+    
+      <Route path="*" element={<App />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/weatherform" element={<WeatherForm />} /> {/* Add the weather form route */}

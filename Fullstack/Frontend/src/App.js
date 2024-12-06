@@ -103,8 +103,33 @@
 //   );
 // }
 
+// import React from "react";
+// import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// import WeatherForm from "./components/weatherform"; // Import WeatherForm
+// import Login from "./Login"; // Your login component
+
+// const App = () => {
+//   const isAuthenticated = localStorage.getItem("token"); // Check if token exists
+
+//   return (
+//     <Router>
+//       <Routes>
+//         {/* Login route */}
+//         <Route path="/login" element={<Login />} />
+
+//         {/* Weather Prediction route, only accessible if authenticated */}
+//         <Route path="/weatherform" element={<WeatherForm />} />
+
+//         {/* Default route - can be to login or another page */}
+//         <Route path="/" element={<Navigate to="/login" />} />
+//       </Routes>
+//     </Router>
+//   );
+// };
+
+// export default App;
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import WeatherForm from "./components/weatherform"; // Import WeatherForm
 import Login from "./Login"; // Your login component
 
@@ -112,18 +137,16 @@ const App = () => {
   const isAuthenticated = localStorage.getItem("token"); // Check if token exists
 
   return (
-    <Router>
-      <Routes>
-        {/* Login route */}
-        <Route path="/login" element={<Login />} />
+    <Routes>
+      {/* Login route */}
+      <Route path="/login" element={<Login />} />
 
-        {/* Weather Prediction route, only accessible if authenticated */}
-        <Route path="/weatherform" element={<WeatherForm />} />
+      {/* Weather Prediction route, only accessible if authenticated */}
+      <Route path="/weatherform" element={<WeatherForm />} />
 
-        {/* Default route - can be to login or another page */}
-        <Route path="/" element={<Navigate to="/login" />} />
-      </Routes>
-    </Router>
+      {/* Default route - redirect to login */}
+      <Route path="/" element={<Navigate to="/login" />} />
+    </Routes>
   );
 };
 

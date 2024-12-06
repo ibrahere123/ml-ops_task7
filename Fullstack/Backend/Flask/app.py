@@ -4,7 +4,7 @@ import joblib
 app = Flask(__name__)
 
 # Load the model
-model_path = r'Models/model.pkl'
+model_path = "../Models/model.pkl"
 model = joblib.load(model_path)
 
 @app.route('/predict', methods=['POST'])

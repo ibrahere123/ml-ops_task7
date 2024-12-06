@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
+import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
+import { motion } from "framer-motion"; // Import framer-motion
 
 const Signup = () => {
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,83 +25,65 @@ const Signup = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h2>Sign Up</h2>
-        <form onSubmit={handleSignUp}>
-          <div style={styles.inputGroup}>
-            <label>Username</label>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-500">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="relative z-10 max-w-md mx-auto p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl"
+      >
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Sign Up</h2>
+
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <div className="relative">
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={styles.input}
+              placeholder="Username"
+              className="w-full pl-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 transition-all duration-300"
               required
             />
           </div>
-          <div style={styles.inputGroup}>
-            <label>Password</label>
+          <div className="relative">
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={styles.input}
+              placeholder="Password"
+              className="w-full pl-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 transition-all duration-300"
               required
             />
           </div>
-          {error && <p style={styles.error}>{error}</p>}
-          <button type="submit" style={styles.button}>Sign Up</button>
+          
+          {error && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-red-500 text-center"
+            >
+              {error}
+            </motion.p>
+          )}
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            className="w-full py-3 rounded-lg text-white font-semibold bg-blue-500 hover:bg-blue-600 transition-all duration-300"
+          >
+            Sign Up
+          </motion.button>
         </form>
-        <p style={styles.loginLink}>
-          Already have an account? <a href="/login">Login here</a>
-        </p>
-      </div>
+
+        <div className="mt-4 text-center">
+          <span>Already have an account? </span>
+          <a href="/login" className="text-blue-500">Login here</a>
+        </div>
+      </motion.div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f4",
-  },
-  formContainer: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    width: "300px",
-  },
-  inputGroup: {
-    marginBottom: "15px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginTop: "5px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  error: {
-    color: "red",
-    fontSize: "12px",
-  },
-  loginLink: {
-    textAlign: "center",
-    marginTop: "10px",
-  },
 };
 
 export default Signup;
