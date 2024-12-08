@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: fahaddockerhub24/frontend:latest
+        ports:
+        - containerPort: 3000  # Container listens on port 3000
+        env:
+        - name: MONGO_URI
+          value: "mongodb+srv://fahadalamawan:mypassword@cluster1.iqjix.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster1"
+        - name: JWT_SECRET
+          value: "wwz7xE8aOj9RIx"

@@ -5,22 +5,42 @@ import { motion } from "framer-motion"; // Import framer-motion
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form submission
+
     if (!username || !password) {
       setError("Both username and password are required.");
       return;
     }
 
-    const token = "dummy_token"; 
+    try {
+      // Make the API request to the backend login route
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (token) {
-      localStorage.setItem("token", token); 
-      navigate("/weatherform"); 
-    } else {
-      setError("Invalid username or password.");
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store the token in localStorage if login is successful
+        localStorage.setItem("token", data.token);
+
+        // Redirect the user to the weather form page
+        navigate("/weatherform");
+      } else {
+        // If login fails, show the error message
+        setError(data.error || "Invalid username or password.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred. Please try again.");
     }
   };
 

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-backend
+  labels:
+    app: express-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: express-backend
+  template:
+    metadata:
+      labels:
+        app: express-backend
+    spec:
+      containers:
+      - name: express-backend
+        image: fahaddockerhub24/express:latest  # Ensure this is your Express backend image
+        ports:
+        - containerPort: 80
+        env:
+        - name: MONGO_URI
+          value: "mongodb+srv://fahadalamawan:mypassword@cluster1.iqjix.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster1"
+        - name: JWT_SECRET
+          value: "wwz7xE8aOj9RIx"
