@@ -4,14 +4,11 @@ on:
   push:
     branches:
       - prod
-  pull_request:
-    branches:
-      - prod
 
 jobs:
   deploy-to-k8s:
     name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       # Step 1: Checkout the code
@@ -20,10 +17,10 @@ jobs:
 
       # Step 2: Set up Minikube
       - name: Set up Minikube
-       uses: manusa/actions-setup-minikube@v2.5.0
+        uses: manusa/actions-setup-minikube@v2.5.0
         with:
-          minikube-version: 'v1.30.1'
-          kubernetes-version: 'v1.26.3'
+          minikube version: 'v1.30.1'
+          kubernetes version: 'v1.26.3'
           driver: docker
 
       # Step 3: Start Minikube
@@ -45,7 +42,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 6: Pull Docker Images (Optional, but good for verification)
+      # Step 6: Pull Docker Images
       - name: Pull Docker Images from DockerHub
         run: |
           docker pull iboe0512/weather-app-backend-flask:latest
@@ -70,7 +67,24 @@ jobs:
           kubectl apply -f k8s/frontend-deployment.yaml
           kubectl apply -f k8s/frontend-service.yaml
 
-      # Step 10: Verify Kubernetes Resources
+      # Step 10: Port Forward the Frontend Service for internal access
+      - name: Port Forward Frontend Service
+        run: |
+          kubectl port-forward svc/frontend-service 8081:80 &
+
+      # Step 11: Optionally expose Minikube service using ngrok
+      - name: Install ngrok
+        run: |
+          curl -s https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip
+
+      - name: Expose Minikube Service with ngrok
+        run: |
+          ngrok http 80801 --bind-tls=true &
+          sleep 10
+          ngrok_url=$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+          echo "Access your service at: $ngrok_url"
+
+      # Step 12: Verify Kubernetes Resources
       - name: Verify Kubernetes Pods and Services
         run: |
           kubectl get pods
